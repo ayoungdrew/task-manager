@@ -1,7 +1,5 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>We're offline</h2>
     <task-list></task-list>
   </div>
 </template>

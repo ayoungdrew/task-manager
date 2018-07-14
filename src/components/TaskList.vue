@@ -1,11 +1,17 @@
 <template>
   <div class="hello">
+    <task-item></task-item>
     <h1>{{ msg }}</h1>
     <ul>
       <li class="category-item" v-for="category in categories">
         {{ category.name }}
         <ul>
-          <li class="task-item" v-for="task in tasks" v-if="task.category_id === category.id" :class="{ strike: task.status }">
+          <li
+            class="task-item"
+            v-for="task in tasks"
+            v-if="task.category_id === category.id"
+            v-on:click="changeTaskStatus(task.id, task.status)"
+            :class="{ strike: task.status }">
             <a href="#">{{ task.name }}</a>
           </li>
         </ul>
@@ -16,9 +22,10 @@
 
 <script>
 import axios from 'axios';
+import TaskItem from '@/components/TaskItem'
 
 export default {
-  name: 'HelloWorld',
+  name: 'TaskList',
   data() {
     return {
       categories: '',
@@ -26,18 +33,17 @@ export default {
       msg: 'This is the task list component',
     };
   },
+  components: {
+    TaskItem
+  },
   created: function () {
+    console.log('yay happy to be here')
     this.loadCategories()
   },
   methods: {
-    testMethod() {
-      console.log('helloooo')
-    },
     loadCategories() {
-      console.log('hey')
       axios.get('http://localhost:3000/categories')
         .then((categories) => {
-          console.log(categories)
           this.categories = categories.data
           console.log('local store of categories', this.categories)
         })
@@ -51,12 +57,21 @@ export default {
         .then((tasks) => {
           this.tasks = tasks.data
           console.log('local store of tasks', this.tasks)
-          // $('.task').remove()
-          // for (let i = 0; i < tasks.data.length; i++) {
-          //     $('.category-' + tasks.data[i].category_id).append(
-          //       '<li class="task" task-id="' + tasks.data[i].id + '" data-status="' + tasks.data[i].status + '"><a href="#">' + tasks.data[i].name + '</a></li>'
-          //     )
-          // }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    changeTaskStatus(taskId, taskStatus) {
+      console.log('changing task status', taskId, taskStatus)
+      const newStatus = taskStatus? 0 : 1
+      console.log('newStatus is', newStatus)
+      axios.put('http://localhost:3000/tasks/' + taskId, {
+        status: newStatus
+      })
+        .then((response) => {
+          this.loadCategories()
+          console.log('response is', response)
         })
         .catch(function (error) {
           console.log(error);
