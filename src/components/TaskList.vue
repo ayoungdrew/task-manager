@@ -129,7 +129,6 @@ export default {
           status: 0
         })
         .then((response) => {
-          // this.loadCategories()
           console.log('this tasks are', this.tasks)
           console.log('response is', response)
           this.tasks.push(response.data)
@@ -142,12 +141,11 @@ export default {
       }
     },
     deleteCompleted() {
-      // console.log('removing completed')
-      for (let i = 0; i < this.tasks.length; i++) {
+      for (let i = this.tasks.length-1; i >= 0; i--) {
         if (this.tasks[i].status === 1) {
           axios.delete('http://localhost:3000/tasks/' + this.tasks[i].id)
           .then((response) => {
-            this.loadCategories()
+            this.tasks.splice(i,1)
             console.log('response is', response)
           })
           .catch(function (error) {
@@ -157,28 +155,18 @@ export default {
       }
     },
     deleteEmptyCategories() {
-      console.log('removing empty categories')
-      for (let i = 0; i < this.categories.length; i++) {
-        console.log('checking index', i)
+      for (let i = this.categories.length-1; i >= 0; i--) {
         if (!this.tasks.find(x => x.category_id === this.categories[i].id)) {
-          console.log('result', this.categories[i].name, this.tasks.find(x => x.category_id === this.categories[i].id))
-          console.log('deleting', this.categories[i].name)
-          this.categories.splice(i, 1)
-          // axios.delete('http://localhost:3000/categories/' + this.categories[i].id)
-          // .then((response) => {
-          //   // this.loadCategories()
-          //   console.log('lets remove', this.categories[i])
-          //   // this.categories.splice(i,1)
-          //   console.log('response is', response)
-          // })
-          // .catch(function (error) {
-          //   console.log(error);
-          // });
-        } else {
-          console.log(this.categories[i].name, 'has tasks')
+          axios.delete('http://localhost:3000/categories/' + this.categories[i].id)
+          .then((response) => {
+            this.categories.splice(i,1)
+            console.log('response is', response)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
         }
       }
-      console.log('end of for loop')
     },
     logHello(taskId) {
       console.log('hello!!!', taskId)
