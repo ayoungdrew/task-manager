@@ -17,6 +17,23 @@
         </ul>
       </li>
     </ul>
+    <hr>
+    <ul>
+      <li class="category-item" v-for="category in categories">
+        {{ category.name }}
+        <ul>
+          <task-item :task="task"
+            class="task-item"
+            v-for="task in tasks"
+            v-if="task.category_id === category.id"
+            v-on:changeStatus="changeTaskStatus(task.id, task.status)"
+            :id="task.id"
+            :status="task.status"
+            :name="task.name">
+          </task-item>
+        </ul>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -63,19 +80,22 @@ export default {
         });
     },
     changeTaskStatus(taskId, taskStatus) {
-      console.log('changing task status', taskId, taskStatus)
+      console.log('hi! changing task status', taskId, taskStatus)
       const newStatus = taskStatus? 0 : 1
       console.log('newStatus is', newStatus)
       axios.put('http://localhost:3000/tasks/' + taskId, {
         status: newStatus
       })
         .then((response) => {
-          this.loadCategories()
+          this.tasks.find(x => x.id === taskId).status = newStatus
           console.log('response is', response)
         })
         .catch(function (error) {
           console.log(error);
         });
+    },
+    logHello(taskId, taskStatus) {
+      console.log('hello!!!', taskId)
     }
   }
 };

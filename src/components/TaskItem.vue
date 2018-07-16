@@ -1,6 +1,12 @@
 <template>
-  <div class="hello">
-    <h2>I'm a task item</h2>
+  <div>
+    <li
+    class="hello"
+    :class="{ strike: status === 1 }"
+    something="changeTaskStatus(id, status)"
+    v-on:click="$emit('changeStatus')"
+    ><a href="#">{{ name }} hmm {{ status }}</a>
+  </li><slot></slot>
   </div>
 </template>
 
@@ -9,13 +15,34 @@ import axios from 'axios';
 
 export default {
   name: 'TaskItem',
-  props: ['id', 'name', 'category_id'],
+  props: ['id', 'name', 'category_id', 'status'],
   data() {
     return {
       categories: '',
       tasks: '',
       msg: 'This is the task list component',
     };
+  },
+  created: function () {
+    console.log('status is', this.status)
+  },
+  methods: {
+    changeTaskStatus(taskId, taskStatus) {
+      console.log('changing task status', taskId, taskStatus)
+      const newStatus = taskStatus? 0 : 1
+      axios.put('http://localhost:3000/tasks/' + taskId, {
+        status: newStatus
+      })
+        .then((response) => {
+          // this.loadCategories()
+          console.log('response is', response)
+          console.log('newStatus is', newStatus)
+          this.status = newStatus
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }
 };
 </script>
