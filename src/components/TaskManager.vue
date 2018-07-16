@@ -7,6 +7,7 @@
 <script>
 
 import TaskList from '@/components/TaskList'
+import NewCategory from '@/components/NewCategory'
 
 export default {
   name: 'HelloWorld',
@@ -16,7 +17,8 @@ export default {
     };
   },
   components: {
-    TaskList
+    TaskList,
+    NewCategory
   }
 };
 </script>

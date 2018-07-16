@@ -1,11 +1,10 @@
 <template>
   <div>
     <li
-    class="hello"
     :class="{ strike: status === 1 }"
     something="changeTaskStatus(id, status)"
     v-on:click="$emit('changeStatus')"
-    ><a href="#">{{ name }} hmm {{ status }}</a>
+    ><a href="#">{{ name }}, status: {{ status }}</a>
   </li><slot></slot>
   </div>
 </template>
@@ -23,9 +22,6 @@ export default {
       msg: 'This is the task list component',
     };
   },
-  created: function () {
-    console.log('status is', this.status)
-  },
   methods: {
     changeTaskStatus(taskId, taskStatus) {
       console.log('changing task status', taskId, taskStatus)
@@ -34,7 +30,6 @@ export default {
         status: newStatus
       })
         .then((response) => {
-          // this.loadCategories()
           console.log('response is', response)
           console.log('newStatus is', newStatus)
           this.status = newStatus
@@ -58,11 +53,6 @@ ul {
   list-style-type: none;
   padding: 0;
 }
-
-/* li {
-  display: inline-block;
-  margin: 0 10px;
-} */
 
 a {
   color: #42b983;
