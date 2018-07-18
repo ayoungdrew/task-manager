@@ -22,14 +22,7 @@ export default {
       newCategoryName: ''
     };
   },
-  components: {
-  },
-  created: function () {
-    console.log('loaded new category form')
-  },
   methods: {
-    addCategory() {
-      }
   }
 }
 </script>

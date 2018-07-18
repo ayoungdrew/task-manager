@@ -31,12 +31,6 @@ export default {
       newTaskCategory: ''
     };
   },
-  components: {
-  },
-  created: function () {
-    console.log('loaded new task form')
-    console.log('categories are', this.newTaskCategory)
-  },
   methods: {
     addTask() {
       console.log(this.newTaskName, this.newTaskCategory)

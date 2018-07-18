@@ -4,40 +4,22 @@
     :class="{ strike: status === 1 }"
     something="changeTaskStatus(id, status)"
     v-on:click="$emit('changeStatus')"
-    ><a href="#">{{ name }}, status: {{ status }}</a>
+    ><a href="#">{{ name }}</a>
   </li><slot></slot>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
   name: 'TaskItem',
   props: ['id', 'name', 'category_id', 'status'],
   data() {
     return {
-      categories: '',
-      tasks: '',
       msg: 'This is the task list component',
     };
   },
   methods: {
-    changeTaskStatus(taskId, taskStatus) {
-      console.log('changing task status', taskId, taskStatus)
-      const newStatus = taskStatus? 0 : 1
-      axios.put('http://localhost:3000/tasks/' + taskId, {
-        status: newStatus
-      })
-        .then((response) => {
-          console.log('response is', response)
-          console.log('newStatus is', newStatus)
-          this.status = newStatus
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
   }
 };
 </script>

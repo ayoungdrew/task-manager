@@ -24,19 +24,19 @@
       </div>
       <div class="col-md-6">
         <newCategory v-on:say-hello="addCategory"></newCategory>
+        <hr>
         <newTask
           :categories="this.categories"
           v-on:say-hello="addTask"
         ></newTask>
-      </div>
-      <div class="col-md-12">
-      <form role="form" class="task-form" @submit.prevent="deleteCompleted">
+        <hr>
+        <form role="form" class="task-form" @submit.prevent="deleteCompleted">
           <p><button type="submit" class="btn btn-danger">Remove Completed Tasks</button></p>
-      </form>
-      <form role="form" class="task-form" @submit="deleteEmptyCategories">
+        </form>
+        <form role="form" class="task-form" @submit="deleteEmptyCategories">
           <p><button type="submit" class="btn btn-danger">Remove Empty Categories</button></p>
-      </form>
-    </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -53,8 +53,8 @@ export default {
   data() {
     return {
       msg: 'Vue Task Manager ver. 2',
-      categories: '',
-      tasks: ''
+      categories: [],
+      tasks: []
     };
   },
   components: {
@@ -63,7 +63,6 @@ export default {
     NewTask
   },
   created: function () {
-    console.log('yay happy to be here')
     this.loadCategories()
   },
   methods: {
@@ -71,7 +70,7 @@ export default {
       axios.get('http://localhost:3000/categories')
         .then((response) => {
           this.categories = response.data
-          console.log('local store of categories', this.categories)
+          // console.log('local store of categories', this.categories)
         })
         .then(this.loadTasks)
         .catch(function (error) {
@@ -82,14 +81,13 @@ export default {
       axios.get('http://localhost:3000/tasks')
         .then((response) => {
           this.tasks = response.data
-          console.log('local store of tasks', this.tasks)
+          // console.log('local store of tasks', this.tasks)
         })
         .catch(function (error) {
           console.log(error);
         });
     },
     changeTaskStatus(taskId, taskStatus) {
-      console.log('hi! task id is', taskId, 'and status is', taskStatus)
       const newStatus = taskStatus? 0 : 1
       axios.put('http://localhost:3000/tasks/' + taskId, {
         status: newStatus
@@ -103,14 +101,11 @@ export default {
         });
     },
     addCategory(newCategoryName) {
-      console.log(newCategoryName)
       if (newCategoryName.length > 0) {
         axios.post('http://localhost:3000/categories', {
           name: newCategoryName,
         })
         .then((response) => {
-          console.log('categories are', this.categories)
-          console.log('this categories', this.categories)
           this.categories.push(response.data)
           console.log('response is', response);
         })
@@ -129,7 +124,6 @@ export default {
           status: 0
         })
         .then((response) => {
-          console.log('this tasks are', this.tasks)
           console.log('response is', response)
           this.tasks.push(response.data)
         })
@@ -179,12 +173,15 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 a {
   color: #42b983;
   text-decoration: none;
+}
+
+hr {
+  border-width: 2px;
 }
 
 .btn {
